@@ -1,9 +1,9 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logique/controller/network/network_controller.dart';
+import 'package:logique/model/post_model.dart';
 import 'package:logique/model/user_model.dart';
 import 'package:logique/utils/state/view_data_state.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -28,18 +28,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required this.networkController})
       : super(
           HomeState(
-              dataUser: ViewData.initial(),
-              hasReachedMax: ViewData.loaded(data: false),
-              index: ViewData.initial()),
+            dataUser: ViewData.initial(),
+            hasReachedMax: ViewData.loaded(data: false),
+            index: ViewData.initial(),
+            detailUser: ViewData.initial(),
+            listPost: ViewData.initial(),
+          ),
         ) {
     on<HomeLoaded>((event, emit) async {
       final reachedMax = state.hasReachedMax.data;
-      if (!reachedMax!)
+      if (!reachedMax!) {
         emit(
           state.copyWith(
             dataUser: ViewData.loading(),
           ),
         );
+      }
       try {
         final data = await networkController.getDataUser(page: _page);
         if (data.isEmpty) {
@@ -74,6 +78,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       ),
     );
 
+    on<HomeUserDetail>((event, emit) async {
+      final response = await networkController.getDataUserById(idUser: event.idUser);
+      return emit(state.copyWith(detailUser: ViewData.loaded(data: response)));
+    });
+
+    on<HomeListPost>((event, emit) async {
+      final response = await networkController.getDataPostById(idUser: event.idUser);
+      return emit(state.copyWith(listPost: ViewData.loaded(data: response)));
+    });
 
   }
 }

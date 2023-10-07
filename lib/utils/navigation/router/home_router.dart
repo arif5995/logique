@@ -6,7 +6,7 @@ abstract class HomeRouter {
 
   void goBack({String? arguments});
 
-  void navigateToDetailHome({int? idUser});
+  void navigateToDetailHome({String? idUser});
 }
 
 class HomeRouterImpl implements HomeRouter {
@@ -20,7 +20,7 @@ class HomeRouterImpl implements HomeRouter {
   }
 
   @override
-  void navigateToDetailHome({int? idUser}) {
+  void navigateToDetailHome({String? idUser}) {
     navigationHelper.pushNamedAndRemoveUntil(AppRouter.homeDetail, arguments: idUser ?? 0);
   }
 

@@ -32,7 +32,9 @@ class MyApp extends StatelessWidget {
             case AppRouter.homeDetail:
               return MaterialPageRoute(
                   builder: (_) => BlocProvider(
-                        create: (context) => HomeBloc(networkController: sl()),
+                        create: (context) => HomeBloc(networkController: sl())
+                          ..add(HomeUserDetail(idUser: argument as String))
+                          ..add(HomeListPost(idUser: argument)),
                         child: HomeDetail(),
                       ));
           }

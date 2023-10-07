@@ -20,3 +20,26 @@ class HomeOnTab extends HomeEvent{
   List<Object?> get props => [index];
 
 }
+
+class HomeUserDetail extends HomeEvent{
+  final String idUser;
+
+  HomeUserDetail({required this.idUser});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [idUser];
+
+}
+
+class HomeListPost extends HomeEvent{
+  final String idUser;
+
+  HomeListPost({required this.idUser});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [idUser];
+
+}
+

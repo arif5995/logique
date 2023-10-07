@@ -37,7 +37,7 @@ class BottomNavigation extends StatelessWidget {
           showUnselectedLabels: true,
           showSelectedLabels: true,
           onTap: (value) {
-            context.read<HomeBloc>().add(HomeOnTab(index: value));
+            context.read<HomeBloc>().add((HomeOnTab(index: 0)));
           },
           currentIndex: context.read<HomeBloc>().state.index.data ?? 0,
           type: BottomNavigationBarType.fixed,

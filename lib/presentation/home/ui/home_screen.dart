@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (ctx, index) {
                     final item = data[index];
                     return InkWell(
-                      onTap: ()=> homeRouter.navigateToDetailHome(idUser: 1),
+                      onTap: ()=> homeRouter.navigateToDetailHome(idUser: item.id),
                       child: Card(
                         child: Column(
                           children: [
