@@ -2,6 +2,7 @@ class Post {
   String? id;
   String? image;
   int? likes;
+  bool? isLike;
   List<String>? tags;
   String? text;
   String? publishDate;
@@ -11,6 +12,7 @@ class Post {
       {this.id,
         this.image,
         this.likes,
+        this.isLike = false,
         this.tags,
         this.text,
         this.publishDate,

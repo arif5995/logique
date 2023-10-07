@@ -29,6 +29,14 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (RouteSettings settings) {
           final argument = settings.arguments;
           switch (settings.name) {
+            case AppRouter.home:
+              return MaterialPageRoute(
+                  builder: (_) => BlocProvider(
+                        create: (context) => HomeBloc(networkController: sl())
+                          ..add(HomeLoaded())
+                          ..add(HomeOnTab(index: 0)),
+                        child: BottomNavigation(),
+                      ));
             case AppRouter.homeDetail:
               return MaterialPageRoute(
                   builder: (_) => BlocProvider(

@@ -43,3 +43,25 @@ class HomeListPost extends HomeEvent{
 
 }
 
+class HomeIsFriends extends HomeEvent{
+  final bool isFriend;
+
+  HomeIsFriends({required this.isFriend});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [isFriend];
+
+}
+
+class HomeIsLike extends HomeEvent{
+  final bool isLike;
+
+  HomeIsLike({required this.isLike});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [isLike];
+
+}
+

@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logique/di/dependency.dart';
 import 'package:logique/presentation/home/bloc/home_bloc.dart';
+import 'package:logique/utils/navigation/router/home_router.dart';
 import 'package:logique/utils/state/view_data_state.dart';
 
 class HomeDetail extends StatelessWidget {
-  const HomeDetail({super.key});
+  HomeDetail({super.key});
+
+  final HomeRouter homeRouter = sl();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      backgroundColor: Colors.blueAccent,
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () => homeRouter.navigateToHome(index: 0),
+            icon: Icon(Icons.arrow_back)),
+      ),
+      backgroundColor: Colors.blueAccent.shade100,
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -69,12 +77,28 @@ class HomeDetail extends StatelessWidget {
                   SizedBox(
                     width: 5,
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.check_circle_outline,
-                      size: 24,
-                    ),
+                  BlocBuilder<HomeBloc, HomeState>(
+                    builder: (context, state) {
+                      final status = state.detailUser.status;
+                      if (status.isHasData) {
+                        final data = state.detailUser.data;
+                        final isFriends = state.isFriends.data;
+                        return IconButton(
+                          onPressed: () {
+                            context.read<HomeBloc>().add(HomeIsFriends(
+                                isFriend: data.isFriends ?? false));
+                          },
+                          icon: Icon(
+                            data!.isFriends!
+                                ? Icons.check_box
+                                : Icons.check_box_outline_blank,
+                            size: 24,
+                            color: data.isFriends! ? Colors.green : Colors.grey,
+                          ),
+                        );
+                      }
+                      return SizedBox();
+                    },
                   ),
                 ],
               ),
@@ -147,7 +171,7 @@ class HomeDetail extends StatelessWidget {
                                 "Address: ",
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              Text(data?.location?.street ?? ""),
+                              Text(data?.location?.street ?? "", overflow: TextOverflow.fade,),
                             ],
                           ),
                           SizedBox(
@@ -169,8 +193,7 @@ class HomeDetail extends StatelessWidget {
                     final data = state.listPost.data;
                     return ListView.builder(
                         shrinkWrap: true,
-                        physics:
-                        const NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: data!.length,
                         itemBuilder: (ctx, index) {
                           final item = data[index];
@@ -214,7 +237,9 @@ class HomeDetail extends StatelessWidget {
                                                   return const SizedBox();
                                                 })),
                                       ),
-                                      SizedBox(width: 5,),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -230,36 +255,61 @@ class HomeDetail extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 5,),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Image.network(item.image ?? ""),
-                                  SizedBox(height: 5,),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   SizedBox(
                                     height: 30,
                                     child: ListView.builder(
                                         shrinkWrap: true,
                                         scrollDirection: Axis.horizontal,
                                         physics:
-                                        const NeverScrollableScrollPhysics(),
+                                            const NeverScrollableScrollPhysics(),
                                         itemCount: item.tags!.length,
-                                        itemBuilder: (ctx, index){
-                                        final tagged = item.tags![index];
-                                        return Padding(
-                                          padding: const EdgeInsets.all(2),
-                                          child: Container(
-                                            padding: EdgeInsets.all(5),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              color: Colors.blue
+                                        itemBuilder: (ctx, index) {
+                                          final tagged = item.tags![index];
+                                          return Padding(
+                                            padding: const EdgeInsets.all(2),
+                                            child: Container(
+                                              padding: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.blue),
+                                              child:
+                                                  Center(child: Text(tagged)),
                                             ),
-                                            child: Center(child: Text(tagged)),
-                                          ),
-                                        );
-                                    }),
+                                          );
+                                        }),
                                   ),
-                                  SizedBox(height: 5,),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Text(item.text ?? ""),
-                                  Text("${item.likes.toString()} Likes", style: TextStyle(color: Colors.red),),
-
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.favorite_outlined,
+                                          size: 24,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                      Text(
+                                        "${item.likes.toString()} Likes",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),

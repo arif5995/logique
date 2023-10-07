@@ -28,12 +28,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required this.networkController})
       : super(
           HomeState(
-            dataUser: ViewData.initial(),
-            hasReachedMax: ViewData.loaded(data: false),
-            index: ViewData.initial(),
-            detailUser: ViewData.initial(),
-            listPost: ViewData.initial(),
-          ),
+              dataUser: ViewData.initial(),
+              hasReachedMax: ViewData.loaded(data: false),
+              index: ViewData.initial(),
+              detailUser: ViewData.initial(),
+              listPost: ViewData.initial(),
+              isFriends: ViewData.initial(),
+              isLikes: ViewData.initial()),
         ) {
     on<HomeLoaded>((event, emit) async {
       final reachedMax = state.hasReachedMax.data;
@@ -79,14 +80,26 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
     on<HomeUserDetail>((event, emit) async {
-      final response = await networkController.getDataUserById(idUser: event.idUser);
+      final response =
+          await networkController.getDataUserById(idUser: event.idUser);
       return emit(state.copyWith(detailUser: ViewData.loaded(data: response)));
     });
 
     on<HomeListPost>((event, emit) async {
-      final response = await networkController.getDataPostById(idUser: event.idUser);
+      final response =
+          await networkController.getDataPostById(idUser: event.idUser);
       return emit(state.copyWith(listPost: ViewData.loaded(data: response)));
     });
 
+    on<HomeIsFriends>((event, emit) async {
+      final data = state.detailUser.data;
+      emit(
+        state.copyWith(
+          detailUser: ViewData.loaded(
+            data: data?.copyWith(isFriends: !event.isFriend),
+          ),
+        ),
+      );
+    });
   }
 }

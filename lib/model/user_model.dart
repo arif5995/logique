@@ -11,6 +11,7 @@ class User {
   Location? location;
   String? registerDate;
   String? updatedDate;
+  bool? isFriends;
 
   User(
       {this.id,
@@ -24,7 +25,40 @@ class User {
         this.phone,
         this.location,
         this.registerDate,
-        this.updatedDate});
+        this.updatedDate,
+        this.isFriends = false
+      });
+
+  User copyWith({
+    String? id,
+    String? title,
+    String? firstName,
+    String? lastName,
+    String? picture,
+    String? gender,
+    String? email,
+    String? dateOfBirth,
+    String? phone,
+    Location? location,
+    String? registerDate,
+    String? updatedDate,
+    bool? isFriends
+  }) =>
+      User(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName,
+        picture: picture ?? this.picture,
+        gender: gender ?? this.gender,
+        email: email ?? this.email,
+        dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+        phone: phone ?? this.phone,
+        location: location ?? this.location,
+        registerDate: registerDate ?? this.registerDate,
+        updatedDate: updatedDate ?? this.updatedDate,
+        isFriends: isFriends ?? this.isFriends
+      );
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -41,6 +75,7 @@ class User {
         : null;
     registerDate = json['registerDate'];
     updatedDate = json['updatedDate'];
+    isFriends = false;
   }
 
   Map<String, dynamic> toJson() {
